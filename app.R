@@ -148,7 +148,10 @@ server <- function(input, output) {
               width=3,offset = 0, style='padding: 0px 0px;margin:-2em'
             )),
           br(),
-          hr(),
+          br(),
+          br(),          
+          br(),
+          br(),
           br(),
           fluidRow(
             column(
@@ -159,6 +162,25 @@ server <- function(input, output) {
               uiOutput("pokeball_display"),
               width=3,offset = 0, style='padding: 0px 0px;margin:-2em'
             )
+          ),
+          hr(),
+          fluidRow(
+            selectInput("region", label = h3("Select Region"), 
+                        choices = list(
+                          # "Dragon" = "dragon",
+                          # "Hawaii" = "hawaii",
+                          "Water" = "water",
+                          # "Sky" = "sky",
+                          # "Grass" = "grass",
+                          "Egypt" = "egypt",
+                          # "Poison" = "poison",
+                          # "Fire" = "fire",
+                          "Rock" = "rock",
+                          "Ice" = "ice",
+                          "Random"="random"
+                        ), 
+                        selected = "water"),
+            img(src = "map.jpg",height="60%", width="60%")
           )
         )
       )
@@ -178,9 +200,21 @@ server <- function(input, output) {
       
       div(
       h3(paste("You have chosen:",input$trainer,input$buddy,input$bag,input$pokeball)),
+      h3(paste("You are in the ",the_region(),"region.")),
       uiOutput("pokemon_encounter"),
       actionButton("go","Go"),
-      verbatimTextOutput("pokedex_display")
+      verbatimTextOutput("pokedex_display"),
+      # selectInput("region_chg",label="Change Region",choices=list(
+      #   "Dragon" = "dragon",
+      #   "Hawaii" = "hawaii",
+      #   "Water" = "water",
+      #   "Sky" = "sky",
+      #   "Grass" = "grass",
+      #   "Egypt" = "egypt",
+      #   "Poison" = "poison",
+      #   "Fire" = "fire",
+      #   "Rock" = "rock"
+      # ),selected=the_region())
       )
       
       
@@ -188,28 +222,46 @@ server <- function(input, output) {
     
   })
   
+  the_region=reactive({
+    
+    # req(input$play)
+    
+    # if(input$play!=1){
+      input$region
+    # }else{
+    #   input$region_chg
+    # }
+  })
   
+  # theregion=reactive({input$region})
   pokedex=reactiveValues(thelist=list())
-  themons=gsub("\\.jpg","",list.files("www/pokemon"))
-  themons=themons[themons!="oclti"]
-  thepokemon<<-sample(themons,2)
+  legendaries <- gsub("\\.jpg","",list.files(paste0("www/pokemon/legendary")))
+  
+  themons=reactive({
+    
+    themons=gsub("\\.jpg","",list.files(paste0("www/pokemon/",the_region())))
+  # themons=themons[themons!="oclti"]
+    themons
+  })
   
   observeEvent(input$go,{
     
-    if(input$go>1){
+    if(input$go==1){
+      thepokemon<<-sample(themons(),2) #get an initial sample
+    }else{
       
       if(runif(1)>.99){
-        thepokemon<<-c(thepokemon[2],"oclti")
+        thepokemon<<-c(thepokemon[2],sample(legendaries,1))
         }else{
-          thepokemon<<-c(thepokemon[2],sample(themons,1))
+          thepokemon<<-c(thepokemon[2],sample(themons(),1))
         }
     }
     
     output$pokemon_encounter = renderUI({
       
       div(
-        h3(paste("Wow! Its",thepokemon[2],if(thepokemon[2]=="oclti"){"WOW!!!!!  It's LEGENDARY!!!!!!!!!!"}else{""})),
-        img(src = paste0("pokemon/",thepokemon[2],".jpg"),height="10%", width="10%"),
+        h3(paste0("Wow! Its ",thepokemon[2],"! ",if(thepokemon[2] %in% legendaries){"WOW!!!!!  It's LEGENDARY!!!!!!!!!!"}else{""})),
+        img(src = paste0("pokemon/",if(thepokemon[2] %in% legendaries){"legendary"}else{the_region()},"/",thepokemon[2],".jpg"),height="10%", width="10%"),
         selectInput("what_to_do", label = "What do you want to do?", 
                     choices = list("Catch It" = "catch", "Run" = "run"), 
                     selected = "catch"),
