@@ -28,7 +28,7 @@ server <- function(input, output) {
   output$trainer_display = renderUI({
     div(
     h2("Trainer"),
-    img(src = paste0("trainers/",input$trainer,".jpg"),height="60%", width="60%")
+    img(src = paste0("trainers/",input$trainer,".jpg"),height="30%", width="30%")
     )
     
   })
@@ -141,11 +141,11 @@ server <- function(input, output) {
           fluidRow(
             column(
               uiOutput("trainer_display"),
-              width=9,offset = 0, style='padding: 0px 0px;'
+              width=9
             ),
             column(
               uiOutput("bag_display"),
-              width=3,offset = 0, style='padding: 0px 0px;margin:-2em'
+              width=3
             )),
           br(),
           br(),
@@ -156,11 +156,11 @@ server <- function(input, output) {
           fluidRow(
             column(
               uiOutput("buddy_display"),
-              width=9,offset = 0, style='padding: 0px 0px;margin:-2em'
+              width=9
             ),
             column(
               uiOutput("pokeball_display"),
-              width=3,offset = 0, style='padding: 0px 0px;margin:-2em'
+              width=3
             )
           )
         )
@@ -198,7 +198,7 @@ server <- function(input, output) {
                       "Random"="random"
                     ), 
                     selected = "water"),
-        img(src = "map.jpg",height="60%", width="60%")
+        img(src = "map.jpg",height="30%", width="30%")
       ),
       uiOutput("pokemon_encounter"),
       actionButton("go","Go"),
