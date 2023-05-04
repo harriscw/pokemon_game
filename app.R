@@ -189,10 +189,11 @@ server <- function(input, output) {
                       # "Hawaii" = "hawaii",
                       "Water" = "water",
                       # "Sky" = "sky",
-                      # "Grass" = "grass",
+                      "Grass" = "grass",
                       "Egypt" = "egypt",
                       # "Poison" = "poison",
                       # "Fire" = "fire",
+                      "Dark" = "dark",
                       "Rock" = "rock",
                       "Ice" = "ice",
                       "Random"="random"
@@ -241,7 +242,7 @@ server <- function(input, output) {
       
       div(
         h3(paste("You are in the ",current_region,"region.")),
-        h3(paste0("Wow! Its ",thepokemon[2],"! ",if(thepokemon[2] %in% legendaries){"WOW!!!!!  It's LEGENDARY!!!!!!!!!!"}else{""})),
+        h3(paste0("Wow! Its ",gsub("_"," ",thepokemon[2]),"! ",if(thepokemon[2] %in% legendaries){"WOW!!!!!  It's LEGENDARY!!!!!!!!!!"}else{""})),
         img(src = paste0("pokemon/",if(thepokemon[2] %in% legendaries){"legendary"}else{current_region},"/",thepokemon[2],".jpg"),height="10%", width="10%"),
         selectInput("what_to_do", label = "What do you want to do?", 
                     choices = list("Catch It" = "catch", "Run" = "run"), 
