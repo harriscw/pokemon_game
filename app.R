@@ -183,6 +183,8 @@ server <- function(input, output) {
       h3(paste("You have chosen:",input$trainer,input$buddy,input$bag,input$pokeball)),
       hr(),
       fluidRow(
+        h3("Map"),
+        img(src = "map.jpg",height="30%", width="30%"),
         selectInput("region", label = h3("Select Region"), 
                     choices = list(
                       # "Dragon" = "dragon",
@@ -198,12 +200,11 @@ server <- function(input, output) {
                       "Ice" = "ice",
                       "Random"="random"
                     ), 
-                    selected = "water"),
-        img(src = "map.jpg",height="30%", width="30%")
+                    selected = "water")
       ),
       uiOutput("pokemon_encounter"),
       actionButton("go","Go"),
-      verbatimTextOutput("pokedex_display")
+      uiOutput("the_pokedex_ui")
       
       )
       
@@ -275,6 +276,16 @@ server <- function(input, output) {
     
   })
   
+  output$the_pokedex_ui=renderUI({
+    
+    if(length(pokedex$thelist)>0){
+    div(
+      hr(),
+      h3("Pokedex"),
+      verbatimTextOutput("pokedex_display")
+    )
+    }
+  })
   
       
 
