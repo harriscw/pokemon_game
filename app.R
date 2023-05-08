@@ -73,12 +73,21 @@ server <- function(input, output) {
   
   
   
-  
-  
-  
-  
+  #set select screen options
 
+  proper=function(x) paste0(toupper(substr(x, 1, 1)), tolower(substring(x, 2)))
   
+  thebuddies=gsub(".jpg","",list.files("www/buddies"))
+  names(thebuddies)=proper(thebuddies)
+  
+  thetrainers=gsub(".jpg","",list.files("www/trainers"))
+  names(thetrainers)=proper(thetrainers)
+  
+  thebags=gsub(".jpg","",list.files("www/bags"))
+  names(thebags)=proper(thebags)
+  
+  theballs=gsub(".jpg","",list.files("www/balls"))
+  names(theballs)=proper(theballs)
   
 
   output$display_screen=renderUI({
@@ -96,35 +105,16 @@ server <- function(input, output) {
       sidebarPanel(
         width = 2,
         selectInput("trainer", label = h3("Pick Trainer"), 
-                    choices = list("Cool Guy" = "coolguy",
-                                   "Paaonm" = "paaonm"), 
-                    selected = "nosword"),
-        selectInput("buddy", label = h3("Pick Buddy"), 
-                    choices = list(
-                      "Gom" = "gom",
-                      "Momom" = "momom",
-                      "Tmotnot" = "tmotnot",
-                      "Ots" = "ots",
-                      "Opm" = "opm",
-                      "Tis" = "tis",
-                      "Tvtv" = "tvtv"
-                    ), 
-                    selected = "nosword"),
+                    choices = thetrainers, 
+                    selected = "coolguy"),
         selectInput("bag", label = h3("Pick Pokebag"),
-                    choices = list("Bulbasaur" = "bulb",
-                                   "Chansey" = "chansey",
-                                   "Normal Type" = "normal"
-                    ),
+                    choices = thebags,
                     selected = "bulb"),
+        selectInput("buddy", label = h3("Pick Buddy"), 
+                    choices = thebuddies, 
+                    selected = "gom"),
         selectInput("pokeball", label = h3("Pick Pokeball"), 
-                    choices = list("LOL" = "lol",
-                                   "XOXO" = "xoxo",
-                                   "AOX" = "aox",
-                                   "NTI" = "nti",
-                                   "NMO" = "nmo",
-                                   "Gigantamax Ball" = "gmb"
-                                   
-                    ), 
+                    choices = theballs, 
                     selected = "lol"),
         br(),
         hr(),
