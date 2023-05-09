@@ -78,16 +78,16 @@ server <- function(input, output) {
   proper=function(x) paste0(toupper(substr(x, 1, 1)), tolower(substring(x, 2)))
   
   thebuddies=gsub(".jpg","",list.files("www/buddies"))
-  names(thebuddies)=proper(thebuddies)
+  names(thebuddies)=gsub("_"," ",proper(thebuddies))
   
   thetrainers=gsub(".jpg","",list.files("www/trainers"))
-  names(thetrainers)=proper(thetrainers)
+  names(thetrainers)=gsub("_"," ",proper(thetrainers))
   
   thebags=gsub(".jpg","",list.files("www/bags"))
-  names(thebags)=proper(thebags)
+  names(thebags)=gsub("_"," ",proper(thebags))
   
   theballs=gsub(".jpg","",list.files("www/balls"))
-  names(theballs)=proper(theballs)
+  names(theballs)=gsub("_"," ",proper(theballs))
   
 
   output$display_screen=renderUI({
@@ -106,7 +106,7 @@ server <- function(input, output) {
         width = 2,
         selectInput("trainer", label = h3("Pick Trainer"), 
                     choices = thetrainers, 
-                    selected = "coolguy"),
+                    selected = "cool_guy"),
         selectInput("bag", label = h3("Pick Pokebag"),
                     choices = thebags,
                     selected = "bulb"),
