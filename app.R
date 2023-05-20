@@ -18,7 +18,12 @@ ui <- fluidPage(
     br(),
     br(),
     hr(),
-    conditionalPanel("input.play==0",fluidRow(actionButton("play",label="Play Game")))
+    conditionalPanel("input.play==0",
+                     fluidRow(
+                       h3("Click Here When You're Ready to Play"),
+                       actionButton("play",label="Play Game")
+                       )
+                     )
 
 )
 
@@ -58,6 +63,14 @@ server <- function(input, output) {
     
   })
   
+  output$machines_display = renderUI({
+    div(
+      h2("Machines"),
+      img(src = paste0("machines/",input$machines,".jpg"),height="60%", width="60%")
+    )
+    
+  })
+  
   
   
   
@@ -89,6 +102,9 @@ server <- function(input, output) {
   theballs=gsub(".jpg","",list.files("www/balls"))
   names(theballs)=gsub("_"," ",proper(theballs))
   
+  themachines=gsub(".jpg","",list.files("www/machines"))
+  names(themachines)=gsub("_"," ",proper(themachines))
+  
 
   output$display_screen=renderUI({
     
@@ -104,18 +120,26 @@ server <- function(input, output) {
     sidebarLayout(
       sidebarPanel(
         width = 2,
-        selectInput("trainer", label = h3("Pick Trainer"), 
+        selectInput("trainer", 
+                    label = h3("Pick Trainer"), 
                     choices = thetrainers, 
                     selected = "cool_guy"),
-        selectInput("bag", label = h3("Pick Pokebag"),
+        selectInput("bag", 
+                    label = h3("Pick Pokebag"),
                     choices = thebags,
                     selected = "bulb"),
-        selectInput("buddy", label = h3("Pick Buddy"), 
+        selectInput("buddy", 
+                    label = h3("Pick Buddy"), 
                     choices = thebuddies, 
                     selected = "gom"),
-        selectInput("pokeball", label = h3("Pick Pokeball"), 
+        selectInput("pokeball", 
+                    label = h3("Pick Pokeball"), 
                     choices = theballs, 
                     selected = "lol"),
+        selectInput("machines", 
+                    label = h3("Pick Machine"), 
+                    choices = themachines, 
+                    selected = "egg_incubator"),
         br(),
         hr(),
         br()
@@ -152,25 +176,29 @@ server <- function(input, output) {
               uiOutput("pokeball_display"),
               width=3
             )
+          ),
+          br(),
+          br(),
+          br(),          
+          br(),
+          br(),
+          br(),
+          fluidRow(
+            column(
+              uiOutput("machines_display"),
+              width=9
+            )
           )
         )
       )
     )
       
-    # }else{
-    #   
-    #   ###
-    #   # Game Screen
-    #   ###
-    #   
-    #   h3(paste("You have chosen:",input$trainer,input$buddy,input$bag,input$pokeball))
-    #   
-    #   
-    # }
+
+
     }else{
       
       div(
-      h3(paste("You have chosen:",input$trainer,input$buddy,input$bag,input$pokeball)),
+      h3(paste("You have chosen:",input$trainer,input$buddy,input$bag,input$pokeball,input$machines)),
       hr(),
       fluidRow(
         h3("Map"),
@@ -233,7 +261,7 @@ server <- function(input, output) {
       
       div(
         h3(paste("You are in the ",current_region,"region.")),
-        h3(paste0("Wow! Its ",gsub("_"," ",thepokemon[2]),"! ",if(thepokemon[2] %in% legendaries){"WOW!!!!!  It's LEGENDARY!!!!!!!!!!"}else{""})),
+        h3(paste0("Wow! Its ",gsub("_"," ",thepokemon[2]),"! ",if(thepokemon[2] %in% legendaries){"HOLY SMOKES!!!!!  It's LEGENDARY!!!!!!!!!!"}else{""})),
         img(src = paste0("pokemon/",if(thepokemon[2] %in% legendaries){"legendary"}else{current_region},"/",thepokemon[2],".jpg"),height="10%", width="10%"),
         selectInput("what_to_do", label = "What do you want to do?", 
                     choices = list("Catch It" = "catch", "Run" = "run"), 
