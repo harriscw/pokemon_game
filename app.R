@@ -205,13 +205,13 @@ server <- function(input, output) {
         img(src = "map.jpg",height="30%", width="30%"),
         selectInput("region", label = h3("Select Region"), 
                     choices = list(
-                      # "Dragon" = "dragon",
+                      "Dragon" = "dragon",
                       # "Hawaii" = "hawaii",
                       "Water" = "water",
                       # "Sky" = "sky",
                       "Grass" = "grass",
                       "Egypt" = "egypt",
-                      # "Poison" = "poison",
+                      "Poison" = "poison",
                       # "Fire" = "fire",
                       "Dark" = "dark",
                       "Rock" = "rock",
@@ -234,6 +234,8 @@ server <- function(input, output) {
  
   pokedex=reactiveValues(thelist=list())
   legendaries <- gsub("\\.jpg","",list.files(paste0("www/pokemon/legendary")))
+  dragon_legendaries <- c("ont","cotshia") #define dragon legendaries
+  legendaries=legendaries #remove dragon legendaries
   
   themons=reactive({
     
@@ -251,7 +253,15 @@ server <- function(input, output) {
     }else{
       
       if(runif(1)>.99){
-        thepokemon<<-c(thepokemon[2],sample(legendaries,1))
+        
+          ###
+          # dragon region has legendaries you can only catch in the dragon region
+          ###
+          if(input$region=="dragon"){
+            thepokemon<<-c(thepokemon[2],sample(dragon_legendaries,1))
+          }else{
+            thepokemon<<-c(thepokemon[2],sample(legendaries,1))
+          }
         }else{
           thepokemon<<-c(thepokemon[2],sample(themons(),1))
         }
